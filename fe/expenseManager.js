@@ -1,5 +1,5 @@
 const limitGlobal =  localStorage.getItem('limit') ? parseInt(localStorage.getItem('limit')) : 5 ;
-console.log(limitGlobal);
+let apiUrl = `http://localhost:3000`;
 const config = {
   headers: {
     Authorization: localStorage.getItem("token"),
@@ -14,7 +14,7 @@ function submitExpense(e) {
     cat: e.target.cat.value,
   };
 
-  axios.post("http://localhost:3000/addex", newExpense, config).then(async (res) => {
+  axios.post(`${apiUrl}/addex`, newExpense, config).then(async (res) => {
      paginate();
      getExpenses(Math.ceil(await getTotalNumberOfExpenses()/limitGlobal)-1, limitGlobal);
   });
@@ -31,7 +31,7 @@ async function getExpenses(offset, limitGlobal) {
     <th>Delete</th>
     <th>Edit</th>
 </tr>`;
-  axios.post("http://localhost:3000/getAll", {offset : offset, limit : limitGlobal}, config).then((all) => {
+  axios.post(`${apiUrl}/getAll`, {offset : offset, limit : limitGlobal}, config).then((all) => {
     // all.data is the array of all expenses
     // console.log(all.data);
     all.data.forEach((expense) => {
@@ -53,7 +53,7 @@ async function getExpenses(offset, limitGlobal) {
 
 async function deleteExpense(id) {
   axios
-    .post("http://localhost:3000/delete", { id: id }, config)
+    .post(`${apiUrl}/delete`, { id: id }, config)
     .then( async (response) => {
       // console.log(response);
       paginate();
@@ -76,7 +76,7 @@ function checkLogin(){
 }
 function download(e){
   e.preventDefault();
-  axios.get("http:/localhost:3000/download" , config).then(res=>{
+  axios.get(`${apiUrl}/download`, config).then(res=>{
     if(res.status === 200){
       console.log(res);
       var a = document.createElement('a');
@@ -95,7 +95,7 @@ function download(e){
 
 //getTotalNumberOfExpenses to generate pagination buttons
 async function getTotalNumberOfExpenses(){
-  return axios.get("http://localhost:3000/getTotalNumberOfExpenses", config).then(res=>{
+  return axios.get(`${apiUrl}/getTotalNumberOfExpenses`, config).then(res=>{
       
       return res.data.count;
    }).catch(err=>{

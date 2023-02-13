@@ -1,3 +1,4 @@
+let apiUrl = "http://localhost:3000"
 function registeruser(e) {
   e.preventDefault();
   const user = {
@@ -6,7 +7,7 @@ function registeruser(e) {
     phone: e.target.phone.value,
     password: e.target.password.value,
   };
-  axios.post("http://localhost:3000/register", user).then((res) => {
+  axios.post(`${apiUrl}/register`, user).then((res) => {
     if (res.data.errorMsg) {
       alert(res.data.errorMsg);
     } else {
@@ -22,7 +23,7 @@ async function loginuser(e) {
     password: e.target.password.value,
   };
 
-  const res = await axios.post("http://localhost:3000/login", user);
+  const res = await axios.post(`${apiUrl}/login`, user);
 
   if (res.status === 200) {
     const token = res.data.token;
@@ -59,7 +60,7 @@ function enablefp() {
 function forgotpassword(e) {
   e.preventDefault();
   axios
-    .post("http://localhost:3000/forgotpassword", {
+    .post(`${apiUrl}/forgotpassword`, {
       email: e.target.email.value,
     })
     .then((res) => {

@@ -1,3 +1,4 @@
+let apiUrlP = "http://localhost:3000"
 const configP = {
   headers: {
     Authorization: localStorage.getItem("token"),
@@ -7,14 +8,14 @@ checkPremium();
 async function initiatePremium(e) {
   e.preventDefault();
   //    const token= localStorage.getItem('token');
-  const response = await axios.get("http://localhost:3000/premium", configP);
+  const response = await axios.get(`${apiUrlP}/premium`, configP);
   console.log(response);
   var options = {
     key: response.data.ky_id,
     order_id: response.data.order.id,
     handler: async function (response) {
       await axios.post(
-        "http://localhost:3000/updatePayment",
+        `${apiUrlPP}/updatePayment`,
         {
           order_id: options.order_id,
           payment_id: response.razorpay_payment_id,
@@ -36,7 +37,7 @@ async function initiatePremium(e) {
 ///Check if user is premium
 
 function  checkPremium(){
-   axios.get("http://localhost:3000/checkpremium", configP).then((response) => {
+   axios.get(`${apiUrlP}/checkpremium`, configP).then((response) => {
     // console.log(response.data.isPremium);
     if (response.data.isPremium) {
       const btn = document.getElementById("premiumButton");
@@ -58,7 +59,7 @@ function  checkPremium(){
 async function showLeaderBoard(e) {
   e.preventDefault();
   axios
-    .get("http://localhost:3000/getLeaderBoard", configP)
+    .get(`${apiUrlP}/getLeaderBoard`, configP)
     .then((response) => {
       const table = document.getElementById("leaderboard");
       table.innerHTML = `<h1 class="display-4">Leaderboard</h1> <button onclick="showLeaderBoard(event)" class="btn btn-info">Refresh</button>
@@ -90,10 +91,10 @@ async function showLeaderBoard(e) {
 
 async function getPreviousReport(e){
   e.preventDefault();
-  axios.get("http://localhost:3000/checkpremium", configP).then((response) => {
+  axios.get(`${apiUrlP}/checkpremium`, configP).then((response) => {
     if (response.data.isPremium) {
      
-      axios.get("http://localhost:3000/getAllFiles",configP).then(res=>{
+      axios.get(`${apiUrlP}/getAllFiles`,configP).then(res=>{
         const rows = document.getElementById('AllFiles');
         rows.innerHTML = '';
         res.data.forEach(row=>{
